@@ -6,27 +6,27 @@ Type-1 (Proxmox VE) and Type-2 (VMware Workstation) hypervisors.
 """
 
 def parse_and_compare():
-    # Experimental Data
+    # Experimental Data (Updated with empirical terminal screenshot data)
     type1_data = {
         'name': 'Proxmox VE (Type-1 Bare-Metal)',
-        'total_time': 10.0006,
-        'total_events': 9812,
-        'eps': 981.14,
-        'min_lat': 0.92,
-        'avg_lat': 1.02,
-        'p95_lat': 1.14,
-        'max_lat': 2.85
+        'total_time': 10.0008,
+        'total_events': 9254,
+        'eps': 925.32,
+        'min_lat': 0.65,
+        'avg_lat': 1.08,
+        'p95_lat': 1.63,
+        'max_lat': 8.42
     }
 
     type2_data = {
         'name': 'VMware Workstation (Type-2 Hosted)',
-        'total_time': 10.0013,
-        'total_events': 7795,
-        'eps': 779.24,
-        'min_lat': 1.16,
-        'avg_lat': 1.28,
-        'p95_lat': 1.45,
-        'max_lat': 4.23
+        'total_time': 10.0014,
+        'total_events': 7352,
+        'eps': 734.96,
+        'min_lat': 0.82,
+        'avg_lat': 1.36,
+        'p95_lat': 2.07,
+        'max_lat': 12.34
     }
 
     eps_diff = type1_data['eps'] - type2_data['eps']

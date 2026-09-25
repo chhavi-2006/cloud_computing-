@@ -48,11 +48,11 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
- requirements.txt .
+copy requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-app.py .
+copy app.py .
 
 EXPOSE 5000
 

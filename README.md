@@ -1,11 +1,6 @@
 # Cloud Computing & Virtualization Laboratory
 
-[![Course](https://img.shields.io/badge/Course-Cloud%20Computing-blue.svg)](#)
-[![Technologies](https://img.shields.io/badge/Technologies-Docker%20%7C%20Proxmox%20VE%20%7C%20VMware%20Workstation-orange.svg)](#)
-[![Platform](https://img.shields.io/badge/Platform-Ubuntu%20%7C%20Windows%20PowerShell-green.svg)](#)
-[![Status](https://img.shields.io/badge/Status-Completed-brightgreen.svg)](#)
 
----
 
 ## Executive Summary
 

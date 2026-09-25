@@ -42,44 +42,7 @@ The repository covers two core cloud virtualization experiments:
 
 ---
 
-## Repository Structure
 
-```
-cloud_computing-/
-│
-├── README.md                                  # Main Laboratory Project & Analysis Report
-├── LAB_REPORT.md                              # Formal Academic Lab Report Submission
-│
-├── docker-python-app/                         # Experiment 2: Dockerized Flask Application
-│   ├── app.py                                 # Python Flask Web Application
-│   ├── requirements.txt                       # Application Dependencies (Flask)
-│   ├── Dockerfile                             # Docker Build Instructions (Python 3.12-slim)
-│   └── .dockerignore                          # Build Context Exclusion Rules
-│
-├── images/                                    # Empirical Screenshots & Performance Charts
-│   ├── 1.png                                  # Guest VM Hostnamectl Verification Screenshot
-│   ├── 2.png                                  # Type-2 Hypervisor Results Table Screenshot
-│   ├── 3.png                                  # Observation Parameters Table Screenshot
-│   ├── 4.png / type2_sysbench_terminal.png    # Type-2 Sysbench Terminal Execution Screenshot
-│   ├── docker_build_terminal.png              # Docker Build Command Execution Screenshot
-│   ├── docker_run_ps_terminal.png             # Docker Run & Container PS Terminal Screenshot
-│   ├── docker_browser_localhost5000.png       # Browser Verification Screenshot (localhost:5000)
-│   ├── events_per_second_comparison.png       # Hypervisor Throughput Comparison Graph
-│   ├── latency_comparison.png                 # Hypervisor Latency Metrics Graph
-│   ├── total_events_comparison.png            # Hypervisor Total Events Graph
-│   ├── overall_performance_dashboard.png      # Hypervisor 4-Panel Performance Dashboard
-│   ├── docker_vs_vm_startup_time.png          # Container vs VM Startup Latency Chart
-│   ├── docker_vs_vm_memory_footprint.png       # Container vs VM Memory Footprint Chart
-│   ├── docker_vs_vm_disk_overhead.png          # Container Image vs VM Disk Size Chart
-│   └── containerization_performance_dashboard.png # Containerization 4-Panel Dashboard
-│
-└── scripts/                                   # Automation & Plotting Scripts
-    ├── benchmark.sh                           # Sysbench VM Execution Script
-    ├── generate_plots.py                      # Matplotlib Chart Generator (Hypervisors & Docker)
-    └── parse_sysbench.py                      # Results Parser & Ratio Calculator
-```
-
----
 
 ## Experiment 1: Type-1 vs Type-2 Hypervisor Performance Analysis
 

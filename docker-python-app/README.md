@@ -1,11 +1,6 @@
 # Experiment 2: Dockerizing a Python Web Application
 
-[![Technology](https://img.shields.io/badge/Technology-Docker%20Engine-099cec.svg)](#)
-[![Application](https://img.shields.io/badge/Application-Python%20Flask-blue.svg)](#)
-[![Base Image](https://img.shields.io/badge/Base%20Image-python%3A3.12--slim-green.svg)](#)
-[![Status](https://img.shields.io/badge/Status-Completed-brightgreen.svg)](#)
 
----
 
 ## Overview
 
@@ -53,11 +48,11 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+ requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY app.py .
+app.py .
 
 EXPOSE 5000
 
@@ -66,17 +61,7 @@ CMD ["python", "app.py"]
 
 ---
 
-## 2. Dockerfile Instructions Breakdown
 
-- **`FROM python:3.12-slim`**: Selects an official, minimal Debian-based Python base image (~120 MB) to reduce attack surface and build time.
-- **`WORKDIR /app`**: Creates and sets `/app` as the internal working directory inside the container.
-- **`COPY requirements.txt .`**: Copies the dependency file into `/app` first to leverage Docker layer caching.
-- **`RUN pip install --no-cache-dir -r requirements.txt`**: Installs Flask without saving cached wheel files, minimizing layer size.
-- **`COPY app.py .`**: Copies application logic into the image context.
-- **`EXPOSE 5000`**: Documents port 5000 as the container's listening port.
-- **`CMD ["python", "app.py"]`**: Specifies the default execution command when the container starts.
-
----
 
 ## 3. Step-by-Step Execution Guide
 

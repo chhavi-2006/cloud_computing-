@@ -1,13 +1,5 @@
 # Experiment 4: Kubernetes Multi-Node Cluster Orchestration, Workload Scheduling, Scaling, and Self-Healing on Windows
 
-[![Course](https://img.shields.io/badge/Course-Cloud%20Computing-blue.svg)](#)
-[![Student](https://img.shields.io/badge/Student-Chhavi%20Mishra-purple.svg)](#)
-[![USN](https://img.shields.io/badge/USN-01fe24bci066-green.svg)](#)
-[![Roll%20No](https://img.shields.io/badge/Roll%20No-136-orange.svg)](#)
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-v1.37.0-326CE5.svg?logo=kubernetes&logoColor=white)](#)
-[![KinD](https://img.shields.io/badge/KinD-v0.33.0-blue.svg)](#)
-[![Status](https://img.shields.io/badge/Status-Completed-brightgreen.svg)](#)
-
 ---
 
 ## 👤 Student Information

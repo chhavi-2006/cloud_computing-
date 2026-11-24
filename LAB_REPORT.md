@@ -94,6 +94,15 @@ Following the curriculum lab manual (*Experiment 2: Run, Test and Manage a Docke
 5. **Restart & ID Persistence**: Ran `docker start test-python-container`. Verified instant service recovery on port `5001` and confirmed Container ID `6c755d50ded2` was identical.
 6. **Container Removal & Image Immutability**: Cleanly deallocated container via `docker stop` and `docker rm test-python-container`. Subsequent `docker images` query verified `my-python-app:latest` (200 MB) remained intact in the local repository.
 
+### 4.5 Phase 3: Docker Hub Remote Registry Distribution (`chhavirajeshmishra/my-python-app:v1`)
+
+Following the curriculum lab manual (*Experiment 3: Push a Docker Image to Docker Hub*), the local container image was published to Docker Hub to enable cross-machine deployment (documented in detail in [`docker-python-app/PART_3_README.md`](docker-python-app/PART_3_README.md)):
+
+1. **CLI Authentication**: Executed `docker login` verifying credentials for user `chhavirajeshmishra` (`Login Succeeded`).
+2. **Registry Namespace Tagging**: Executed `docker tag my-python-app chhavirajeshmishra/my-python-app:v1`. Verified that both tags shared the identical Image ID (`be84ed5367f1`), confirming zero additional disk usage.
+3. **Layer-Based Push**: Executed `docker push chhavirajeshmishra/my-python-app:v1`. Common base layers were recognized as `Layer already exists`, streaming compressed application layers (49.1 MB) with final manifest digest `sha256:be84ed5367f1be082b4b991defdf9c5a4d1c7c62d30b774123f28d8ef5a123be`.
+4. **Cloud Verification**: Verified online repository availability at `https://hub.docker.com/r/chhavirajeshmishra/my-python-app` with active tag `v1` ready for remote pulling (`docker pull chhavirajeshmishra/my-python-app:v1`).
+
 ---
 
 ## 5. Part 3: Kubernetes Multi-Node Cluster Orchestration, Workload Scheduling & Self-Healing
@@ -178,6 +187,10 @@ To experimentally verify declarative self-healing:
 19. **Figure 19 (`images/docker_ps_all_stopped_exited.png`)**: Stopped container state verification (`docker ps -a`, status `Exited (137)`).
 20. **Figure 20 (`images/docker_start_and_rm_lifecycle.png`)**: Container restart (`docker start`) and safe removal (`docker rm`).
 21. **Figure 21 (`images/docker_images_persistence_check.png`)**: Base Docker image persistence and immutability check (`docker images`).
+22. **Figure 22 (`images/docker_part3_login_succeeded.png`)**: Docker CLI authentication with Docker Hub (`docker login` -> `Login Succeeded`).
+23. **Figure 23 (`images/docker_part3_tag_verification.png`)**: Image namespace tagging and Image ID consistency check (`docker tag` & `docker images`).
+24. **Figure 24 (`images/docker_part3_push_terminal.png`)**: Layer push execution and SHA256 digest output (`docker push`).
+25. **Figure 25 (`images/docker_part3_hub_portal_verification.png`)**: Docker Hub online web console repository verification (`chhavirajeshmishra/my-python-app`).
 
 ---
 

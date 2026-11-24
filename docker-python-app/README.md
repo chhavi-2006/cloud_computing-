@@ -11,8 +11,10 @@
 > 🚀 **Experiment 2 Multi-Part Documentation**:
 > - 📄 **Part 1 (Current File)**: Dockerizing, Building, and Benchmarking a Python Web Application (Port 5000:5000)
 > - 📄 **Part 2 (Dedicated File)**: [**`PART_2_README.md` — Run, Test and Manage a Docker Container (Lifecycle Operations, Interactive Shell & Port 5001)**](PART_2_README.md)
-> - 📄 **Curriculum Reference Manual**: [**`Experiment_2_Run_Test_and_Manage_Docker_Container.pdf`**](Experiment_2_Run_Test_and_Manage_Docker_Container.pdf)
-> - 📝 **Word Academic Lab Report**: [**`Experiment_2_Run_Test_and_Manage_Docker_Container_Report.docx`**](Experiment_2_Run_Test_and_Manage_Docker_Container_Report.docx)
+> - 📄 **Part 3 (Dedicated File)**: [**`PART_3_README.md` — Push a Docker Image to Docker Hub (Registry Authentication, Tagging & Distribution)**](PART_3_README.md)
+> - 📄 **Curriculum Reference Manuals**: [**`Experiment 2 PDF`**](Experiment_2_Run_Test_and_Manage_Docker_Container.pdf) | [**`Experiment 3 PDF`**](Experiment_3_Push_Docker_Image_to_Docker_Hub.pdf)
+> - 📝 **Word Academic Lab Reports**: [**`Part 2 Word Report`**](Experiment_2_Run_Test_and_Manage_Docker_Container_Report.docx) | [**`Part 3 Word Report`**](Experiment_3_Push_Docker_Image_to_Docker_Hub_Report.docx)
+> - 🌐 **Public Docker Hub Repository**: [**`chhavirajeshmishra/my-python-app:v1`**](https://hub.docker.com/r/chhavirajeshmishra/my-python-app)
 
 ---
 
@@ -32,9 +34,12 @@ docker-python-app/
 ├── .dockerignore                                                        # Build Context Exclusion Rules
 ├── README.md                                                            # Part 1: Build & Deploy Experiment Report
 ├── PART_2_README.md                                                     # Part 2: Run, Test & Manage Lifecycle Report
+├── PART_3_README.md                                                     # Part 3: Push Docker Image to Docker Hub Report
 │
-├── Experiment_2_Run_Test_and_Manage_Docker_Container.pdf                # Reference University Lab Manual
-├── Experiment_2_Run_Test_and_Manage_Docker_Container_Report.docx        # Word Lab Submission Report
+├── Experiment_2_Run_Test_and_Manage_Docker_Container.pdf                # Reference Lab Manual (Part 2)
+├── Experiment_2_Run_Test_and_Manage_Docker_Container_Report.docx        # Word Lab Submission Report (Part 2)
+├── Experiment_3_Push_Docker_Image_to_Docker_Hub.pdf                     # Reference Lab Manual (Part 3)
+├── Experiment_3_Push_Docker_Image_to_Docker_Hub_Report.docx             # Word Lab Submission Report (Part 3)
 │
 └── images/                                                              # Empirical Screenshots & Visualizations
     ├── docker_build_terminal.png                                        # Part 1: Docker image compilation log
@@ -47,7 +52,11 @@ docker-python-app/
     ├── docker_stop_container.png                                        # Part 2: Container graceful stop operation
     ├── docker_ps_all_stopped_exited.png                                 # Part 2: Stopped container state verification (ps -a)
     ├── docker_start_and_rm_lifecycle.png                                # Part 2: Container restart & removal lifecycle
-    └── docker_images_persistence_check.png                              # Part 2: Docker image persistence & reusability
+    ├── docker_images_persistence_check.png                              # Part 2: Docker image persistence & reusability
+    ├── docker_part3_login_succeeded.png                                 # Part 3: Docker CLI authentication log
+    ├── docker_part3_tag_verification.png                                # Part 3: Image namespace tag verification
+    ├── docker_part3_push_terminal.png                                   # Part 3: Layer push & manifest digest log
+    └── docker_part3_hub_portal_verification.png                         # Part 3: Docker Hub online registry console
 ```
 
 ---
@@ -184,14 +193,10 @@ docker ps -a
 
 ---
 
-## 🚀 Proceed to Part 2
+## 🚀 Next Steps in the Docker Laboratory Series
 
-For the complete standalone documentation covering:
-- **Using Existing Docker Images Without Rebuilding**
-- **Host Port Forwarding on Port 5001 (`-p 5001:5000`)**
-- **PowerShell HTTP Verification (`Invoke-WebRequest`)**
-- **Interactive Shell Access (`docker exec -it /bin/sh`)**
-- **Container State Transitions, Restarts (`docker start`) & Safe Deletion (`docker rm`)**
-- **Empirical Proof of Docker Image Persistence & Reusability**
+- 📄 **Part 2**: [**`PART_2_README.md` — Run, Test, and Manage a Docker Container**](PART_2_README.md)
+  *Covers host port forwarding (`5001:5000`), interactive shell debugging (`docker exec -it /bin/sh`), container stop/start state retention, safe deletion, and image persistence.*
 
-👉 **Read the complete report in [**`PART_2_README.md`**](PART_2_README.md)**.
+- 📄 **Part 3**: [**`PART_3_README.md` — Push a Docker Image to Docker Hub**](PART_3_README.md)
+  *Covers Docker Hub registry authentication (`docker login`), namespace tagging (`chhavirajeshmishra/my-python-app:v1`), layer-based streaming (`docker push`), and online registry verification.*

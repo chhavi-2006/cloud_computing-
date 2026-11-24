@@ -59,12 +59,15 @@ cloud_computing-/
 │       ├── k8s_pod_delete_self_healing.png
 │       └── k8s_self_healing_healed.png
 │
-├── docker-python-app/                         # Standalone Folder for Experiment 2 (Docker App)
-│   ├── README.md                              # Standalone Report for Experiment 2 (Docker App)
+├── docker-python-app/                         # Standalone Folder for Experiment 2 (Docker App & Lifecycle)
+│   ├── README.md                              # Complete Report covering Parts 1 & 2
 │   ├── app.py                                 # Flask Web Application Code
 │   ├── requirements.txt                       # Python Dependencies
 │   ├── Dockerfile                             # Docker Build Configuration
-│   └── .dockerignore                          # Context Exclusion Rules
+│   ├── .dockerignore                          # Context Exclusion Rules
+│   ├── Experiment_2_Run_Test_and_Manage_Docker_Container.pdf         # Reference Lab Manual (Part 2)
+│   ├── Experiment_2_Run_Test_and_Manage_Docker_Container_Report.docx # Formatted Word Lab Report
+│   └── images/                                # Empirical Screenshots (Parts 1 & 2)
 │
 ├── VMs-vs-Containers/                         # Standalone Folder for Experiment 3 (VMs vs Containers)
 │   ├── README.md                              # Standalone Report for VMs vs Containers

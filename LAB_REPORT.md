@@ -3,7 +3,7 @@
 **Course Title:** Cloud Computing  
 **Topics:**  
 1. Empirical CPU Performance Benchmark Analysis of Type-1 (Proxmox VE) vs. Type-2 (VMware Workstation) Hypervisors  
-2. Containerization, Build Automation, and Performance Analysis of a Python Web Application using Docker  
+2. Containerization, Build Automation, and Lifecycle Management of a Python Web Application using Docker  
 3. Multi-Node Kubernetes Cluster Provisioning, Workload Scheduling, Horizontal Scaling, and ReplicaSet Self-Healing Fault Tolerance using KinD on Windows  
 **Author / Repository Owner:** `chhavi-2006` (Chhavi Mishra)  
 **USN:** `01fe24bci066` | **Roll No:** `136`  
@@ -14,7 +14,7 @@
 
 ## 1. Abstract
 
-This laboratory report presents an end-to-end performance and architectural investigation across three foundational cloud virtualization and orchestration tiers: **Hardware Virtualization (Hypervisors)**, **OS-Level Virtualization (Docker Containers)**, and **Container Orchestration (Kubernetes)**. In **Part 1**, we provisioned two identical Ubuntu 22.04.5 LTS Virtual Machines (2 vCPU, 2 GB RAM, 20 GB Disk) across a Type-1 Bare-Metal Hypervisor (Proxmox VE / KVM) and a Type-2 Hosted Hypervisor (VMware Workstation), running `sysbench` CPU prime calculation benchmarks. In **Part 2**, we packaged a Python Flask web application into a lightweight Docker image (`my-python-app`), executed background container instances with port forwarding (`5000:5000`), and profiled container resource overhead against virtual machines. In **Part 3**, we orchestrated a production-mode 3-node Kubernetes cluster (1 control-plane, 2 worker nodes) using KinD over WSL 2 on Windows, deployed an NGINX web service, performed horizontal scaling from 3 to 6 replicas with automated 50/50 multi-worker pod distribution, and experimentally validated declarative self-healing recovery (<5 seconds) upon deliberate pod failure injection.
+This laboratory report presents an end-to-end performance and architectural investigation across three foundational cloud virtualization and orchestration tiers: **Hardware Virtualization (Hypervisors)**, **OS-Level Virtualization (Docker Containers)**, and **Container Orchestration (Kubernetes)**. In **Part 1**, we provisioned two identical Ubuntu 22.04.5 LTS Virtual Machines (2 vCPU, 2 GB RAM, 20 GB Disk) across a Type-1 Bare-Metal Hypervisor (Proxmox VE / KVM) and a Type-2 Hosted Hypervisor (VMware Workstation), running `sysbench` CPU prime calculation benchmarks. In **Part 2**, we packaged a Python Flask web application into a lightweight Docker image (`my-python-app`), executed background container instances with port forwarding (`5000:5000` and `5001:5000`), explored internal filesystems via interactive shell (`docker exec -it /bin/sh`), evaluated state retention across stop/start cycles (`6c755d50ded2`), verified clean container deletion (`docker rm`), proved Docker image immutability, and profiled container resource overhead against virtual machines. In **Part 3**, we orchestrated a production-mode 3-node Kubernetes cluster (1 control-plane, 2 worker nodes) using KinD over WSL 2 on Windows, deployed an NGINX web service, performed horizontal scaling from 3 to 6 replicas with automated 50/50 multi-worker pod distribution, and experimentally validated declarative self-healing recovery (<5 seconds) upon deliberate pod failure injection.
 
 Empirical results indicate that Proxmox VE (Type-1) achieved **925.32 EPS** vs VMware Workstation's **734.96 EPS** (+25.90% throughput gain), while Docker containers demonstrated instant startup latency (**<1.0s** vs 22-42s for VMs), negligible memory footprint (**24.5 MB** vs 2048 MB per VM), and minimal image storage overhead (**145 MB** vs 20,000 MB VM disk allocation). Kubernetes container orchestration successfully decoupled workload lifecycle from physical/virtual node constraints, maintaining desired replica counts automatically and distributing compute load evenly across worker nodes.
 
@@ -24,8 +24,8 @@ Empirical results indicate that Proxmox VE (Type-1) achieved **925.32 EPS** vs V
 
 1. Quantify hardware virtualization overhead between Type-1 bare-metal and Type-2 hosted hypervisors.
 2. Build, package, and deploy a Python Flask web application using Docker containerization.
-3. Map host ports to container ports (`-p 5000:5000`) and verify HTTP response via web browser (`http://localhost:5000`).
-4. Perform container lifecycle operations (`build`, `run`, `ps`, `logs`, `stop`, `start`, `rm`).
+3. Map host ports to container ports (`-p 5000:5000` and `-p 5001:5000`) and verify HTTP responses via web browser and PowerShell `Invoke-WebRequest`.
+4. Perform end-to-end container lifecycle operations (`build`, `run`, `ps`, `logs`, `inspect`, interactive shell `exec`, `stop`, `start`, `rm`) and prove base image immutability.
 5. Evaluate performance, storage, and memory overhead differences between Docker containers and Virtual Machines.
 6. Provision a multi-node Kubernetes cluster (1 control plane, 2 workers) on Windows using KinD and Docker Desktop WSL 2.
 7. Deploy, schedule, horizontally scale (3 to 6 replicas), and validate automated self-healing fault tolerance in Kubernetes.
@@ -48,7 +48,7 @@ Empirical results indicate that Proxmox VE (Type-1) achieved **925.32 EPS** vs V
 
 ---
 
-## 4. Part 2: Docker Containerization of Python Web Application
+## 4. Part 2: Docker Containerization of Python Web Application & Lifecycle Management
 
 ### 4.1 Application Source Code (`app.py`)
 ```python
@@ -75,13 +75,24 @@ EXPOSE 5000
 CMD ["python", "app.py"]
 ```
 
-### 4.3 Container Lifecycle Commands & Execution Log
+### 4.3 Phase 1: Build & Initial Deployment (Port 5000:5000)
 
 1. **Build Image**: `docker build -t my-python-app .` (Image created: `my-python-app:latest`, ~145 MB).
 2. **Run Container**: `docker run -d -p 5000:5000 --name my-python-container my-python-app` (Container ID: `726ccde9cfd6`).
 3. **Process Check**: `docker ps` confirmed `0.0.0.0:5000->5000/tcp` port binding and `Up` status.
 4. **Browser Test**: Opened `http://localhost:5000` returning HTTP 200 `"Hello! My first Docker application is running."`.
-5. **Lifecycle Verification**: Tested `docker stop`, `docker start`, and `docker rm`.
+5. **Resource Profiling**: Docker container memory footprint was **24.5 MB** vs **2048 MB** for VMs (83x smaller), starting in **<1.0s** vs 22-42s for hypervisors.
+
+### 4.4 Phase 2: Container Lifecycle Operations, Port Forwarding (5001:5000) & Interactive Shell
+
+Following the curriculum lab manual (*Experiment 2: Run, Test and Manage a Docker Container*), the pre-existing image `my-python-app` was reused to demonstrate container lifecycle management without rebuilding:
+
+1. **Detached Run with Custom Port Binding**: `docker run -d -p 5001:5000 --name test-python-container my-python-app` instantiated container `6c755d50ded2`, mapping host port `5001` to internal Flask port `5000`.
+2. **Multi-Channel HTTP Testing**: Verified service responsiveness via Google Chrome (`http://localhost:5001`) and PowerShell `Invoke-WebRequest http://localhost:5001`, both confirming HTTP 200 OK.
+3. **Interactive Debugging Shell**: Attached to the active container via `docker exec -it test-python-container /bin/sh`. Executed `ls` (confirming `app.py` and `requirements.txt`) and `pwd` (confirming `WORKDIR /app`). Exited shell cleanly without stopping container.
+4. **Graceful Stop & State Inspection**: Executed `docker stop test-python-container`. Inspected stopped state via `docker ps -a`, revealing `Exited (137)` while retaining container configuration and ID.
+5. **Restart & ID Persistence**: Ran `docker start test-python-container`. Verified instant service recovery on port `5001` and confirmed Container ID `6c755d50ded2` was identical.
+6. **Container Removal & Image Immutability**: Cleanly deallocated container via `docker stop` and `docker rm test-python-container`. Subsequent `docker images` query verified `my-python-app:latest` (200 MB) remained intact in the local repository.
 
 ---
 
@@ -160,6 +171,13 @@ To experimentally verify declarative self-healing:
 12. **Figure 12 (`images/k8s_pods_6replicas.png`)**: Scaled 6-replica deployment demonstrating balanced multi-worker distribution.
 13. **Figure 13 (`images/k8s_pod_delete_self_healing.png`)**: Deliberate pod deletion and immediate automated self-healing recreation (<5 seconds).
 14. **Figure 14 (`images/k8s_self_healing_healed.png`)**: Final cluster pod inventory confirming steady-state 6/6 running pods.
+15. **Figure 15 (`images/docker_run_browser_localhost5001.png`)**: Detached container run (`test-python-container`) on port 5001 and browser verification (`http://localhost:5001`).
+16. **Figure 16 (`images/docker_invoke_webrequest_port5001.png`)**: Programmatic HTTP verification via PowerShell `Invoke-WebRequest`.
+17. **Figure 17 (`images/docker_exec_interactive_shell.png`)**: Interactive shell session (`docker exec -it /bin/sh`), `ls`, and working directory check (`pwd` -> `/app`).
+18. **Figure 18 (`images/docker_stop_container.png`)**: Graceful container stop operation (`docker stop`) and running filter check (`docker ps`).
+19. **Figure 19 (`images/docker_ps_all_stopped_exited.png`)**: Stopped container state verification (`docker ps -a`, status `Exited (137)`).
+20. **Figure 20 (`images/docker_start_and_rm_lifecycle.png`)**: Container restart (`docker start`) and safe removal (`docker rm`).
+21. **Figure 21 (`images/docker_images_persistence_check.png`)**: Base Docker image persistence and immutability check (`docker images`).
 
 ---
 

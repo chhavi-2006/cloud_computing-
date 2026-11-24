@@ -5,6 +5,7 @@
 1. Empirical CPU Performance Benchmark Analysis of Type-1 (Proxmox VE) vs. Type-2 (VMware Workstation) Hypervisors  
 2. Containerization, Build Automation, and Lifecycle Management of a Python Web Application using Docker  
 3. Multi-Node Kubernetes Cluster Provisioning, Workload Scheduling, Horizontal Scaling, and ReplicaSet Self-Healing Fault Tolerance using KinD on Windows  
+4. Declarative Infrastructure as Code (IaC) Automation, State Management, and Resource Lifecycle using HashiCorp Terraform on Windows  
 **Author / Repository Owner:** `chhavi-2006` (Chhavi Mishra)  
 **USN:** `01fe24bci066` | **Roll No:** `136`  
 **Repository:** [https://github.com/chhavi-2006/cloud_computing-](https://github.com/chhavi-2006/cloud_computing-)  
@@ -29,6 +30,7 @@ Empirical results indicate that Proxmox VE (Type-1) achieved **925.32 EPS** vs V
 5. Evaluate performance, storage, and memory overhead differences between Docker containers and Virtual Machines.
 6. Provision a multi-node Kubernetes cluster (1 control plane, 2 workers) on Windows using KinD and Docker Desktop WSL 2.
 7. Deploy, schedule, horizontally scale (3 to 6 replicas), and validate automated self-healing fault tolerance in Kubernetes.
+8. Declare, validate, plan, apply, modify, and destroy local infrastructure resources using HashiCorp Terraform on Windows PowerShell.
 
 ---
 
@@ -150,21 +152,56 @@ To experimentally verify declarative self-healing:
 
 ---
 
-## 6. Comprehensive Comparative Analysis
+## 6. Part 4: Infrastructure as Code (IaC) with HashiCorp Terraform
 
-| Feature / Metric | Type-2 Hosted VM (VMware) | Type-1 Bare-Metal VM (Proxmox) | Docker Container | Kubernetes Cluster Orchestration |
-| :--- | :--- | :--- | :--- | :--- |
-| **Virtualization Level** | Host OS Application | Hardware Hypervisor | OS Kernel Namespaces/cgroups | Distributed Container Cluster |
-| **Guest Kernel** | Complete Guest OS | Complete Guest OS | Shared Host Linux Kernel | Shared Node Kernel via CNI SDN |
-| **Startup / Provisioning Time**| ~42.0 seconds | ~22.5 seconds | **< 1.0 second** | **< 5.0 seconds (Self-Healing)** |
-| **Memory Allocation** | 2048 MB | 2048 MB | **24.5 MB** | Dynamic pod requests/limits |
-| **Disk Image Size** | 20,000 MB | 20,000 MB | **145 MB** | Layer-shared node container image |
-| **Fault Recovery** | Manual intervention | High-availability cluster restart | Restart policy / manual | **Automated Zero-Touch Self-Healing** |
-| **Horizontal Elasticity** | Slow VM cloning | Automated VM templates | Scripted container run | **Declarative `kubectl scale` / HPA** |
+### 6.1 Architecture & Declarative Manifest (`main.tf`)
+Terraform v1.17.2 was configured in `C:\Terraform-Lab` to manage local infrastructure using the `hashicorp/local` provider plugin (~> 2.9). The declarative HCL configuration declared a managed resource `local_file.student_file`:
+
+```hcl
+terraform {
+  required_providers {
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.9"
+    }
+  }
+}
+
+resource "local_file" "student_file" {
+  filename = "${path.module}/student.txt"
+  content  = <<-EOT
+    Welcome to Infrastructure as Code!
+    Created using Terraform.
+    This file is managed by Terraform.
+  EOT
+}
+```
+
+### 6.2 Execution Lifecycle Log & State Convergence
+1. **Initialization (`terraform init`)**: Downloaded and cached provider plugin `hashicorp/local v2.9.0` and generated `.terraform.lock.hcl`.
+2. **Validation (`terraform validate`)**: Validated configuration syntax returning `"Success! The configuration is valid."`.
+3. **Speculative Planning (`terraform plan`)**: Evaluated real-world state vs desired state; generated plan: `1 to add, 0 to change, 0 to destroy`.
+4. **Provisioning (`terraform apply`)**: Applied execution plan, created `student.txt` (`id=06e6ae35c344...`), and wrote state to `terraform.tfstate`.
+5. **Modification & Drift Convergence**: Updated `main.tf` with a 4-line confirmation message and applied in-place updates (`id=926632173084...`). A subsequent `terraform apply` confirmed zero configuration drift (`No changes. Your infrastructure matches the configuration`).
+6. **Automated Destruction (`terraform destroy`)**: De-provisioned resource; `Test-Path .\student.txt` returned `False`, confirming complete resource reclamation (documented in detail in [`terraform-iac/README.md`](terraform-iac/README.md)).
 
 ---
 
-## 7. Experimental Visualizations & Evidence
+## 7. Comprehensive Comparative Analysis
+
+| Feature / Metric | Type-2 Hosted VM (VMware) | Type-1 Bare-Metal VM (Proxmox) | Docker Container | Kubernetes Cluster Orchestration | HashiCorp Terraform IaC |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Virtualization / Abstraction Level** | Host OS Application | Hardware Hypervisor | OS Kernel Namespaces/cgroups | Distributed Container Cluster | Declarative Infrastructure Engine |
+| **Target / Guest Kernel** | Complete Guest OS | Complete Guest OS | Shared Host Linux Kernel | Shared Node Kernel via CNI SDN | Target System / Cloud API Resources |
+| **Startup / Provisioning Time**| ~42.0 seconds | ~22.5 seconds | **< 1.0 second** | **< 5.0 seconds (Self-Healing)** | **< 0.1 second (Local file) / API-driven** |
+| **Memory Allocation** | 2048 MB | 2048 MB | **24.5 MB** | Dynamic pod requests/limits | Minimal CLI runtime (~35 MB) |
+| **Disk Image / Footprint** | 20,000 MB | 20,000 MB | **145 MB** | Layer-shared node container image | Compact binary (~90 MB) + state file |
+| **Fault Recovery & Convergence** | Manual intervention | High-availability cluster restart | Restart policy / manual | **Automated Zero-Touch Self-Healing** | **State Refresh & Reconciliation (`apply`)** |
+| **Elasticity & Scalability** | Slow VM cloning | Automated VM templates | Scripted container run | **Declarative `kubectl scale` / HPA** | Declarative `count` / `for_each` replication |
+
+---
+
+## 8. Experimental Visualizations & Evidence
 
 1. **Figure 1 (`images/docker_build_terminal.png`)**: Empirical `docker build` layer building terminal output.
 2. **Figure 2 (`images/docker_run_ps_terminal.png`)**: Empirical `docker run` & `docker ps` container status output.
@@ -191,12 +228,18 @@ To experimentally verify declarative self-healing:
 23. **Figure 23 (`images/docker_part3_tag_verification.png`)**: Image namespace tagging and Image ID consistency check (`docker tag` & `docker images`).
 24. **Figure 24 (`images/docker_part3_push_terminal.png`)**: Layer push execution and SHA256 digest output (`docker push`).
 25. **Figure 25 (`images/docker_part3_hub_portal_verification.png`)**: Docker Hub online web console repository verification (`chhavirajeshmishra/my-python-app`).
+26. **Figure 26 (`images/terraform_validate_and_plan.png`)**: Configuration syntax validation (`terraform validate`) and execution plan generation (`terraform plan`).
+27. **Figure 27 (`images/terraform_apply_creation.png`)**: Managed resource provisioning and state creation (`terraform apply`).
+28. **Figure 28 (`images/terraform_modify_drift_no_changes.png`)**: Configuration update verification and state drift convergence check (`0 added, 0 changed, 0 destroyed`).
+29. **Figure 29 (`images/terraform_destroy_plan_prompt.png`)**: Teardown plan preview and destruction confirmation prompt (`terraform destroy`).
+30. **Figure 30 (`images/terraform_destroy_complete_test_path.png`)**: Resource de-provisioning confirmation and filesystem clean verification (`Test-Path .\student.txt` -> `False`).
 
 ---
 
-## 8. Conclusion
+## 9. Conclusion
 
-This laboratory course suite confirms the distinct operational advantages of cloud virtualization and orchestration tiers:
+This laboratory course suite confirms the distinct operational advantages of cloud virtualization, orchestration, and infrastructure automation tiers:
 1. **Hypervisors**: Type-1 bare-metal hypervisors (Proxmox VE) demonstrate clear CPU execution superiority over Type-2 hosted hypervisors (+25.90% throughput, -20.59% latency).
 2. **Containers**: Docker containers deliver unmatched execution efficiency, dropping startup latency from tens of seconds to under 1 second, and reducing memory usage by 83x.
 3. **Container Orchestration**: Kubernetes elevates containers into production-ready resilient cloud systems, providing automated declarative reconciliation, multi-node compute distribution, horizontal elasticity, and self-healing fault tolerance.
+4. **Infrastructure as Code (IaC)**: HashiCorp Terraform enforces declarative infrastructure lifecycle automation, state tracking (`terraform.tfstate`), drift detection, and automated clean teardown, eliminating configuration drift and manual provisioning errors.

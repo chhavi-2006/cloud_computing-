@@ -5,6 +5,7 @@
 [![USN](https://img.shields.io/badge/USN-01fe24bci066-green.svg)](#)
 [![Roll%20No](https://img.shields.io/badge/Roll%20No-136-orange.svg)](#)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-v1.37.0-326CE5.svg?logo=kubernetes&logoColor=white)](#)
+[![Terraform](https://img.shields.io/badge/Terraform-v1.17.2-844FBA.svg?logo=terraform&logoColor=white)](#)
 [![Status](https://img.shields.io/badge/Status-Completed-brightgreen.svg)](#)
 
 Welcome to the **Cloud Computing Laboratory Suite** repository maintained by **Chhavi Mishra** (USN: `01fe24bci066`, Roll No: `136`). This repository contains complete, standalone cloud infrastructure, hypervisor, containerization, and Kubernetes cluster orchestration benchmark experiments, complete with empirical data, terminal screenshots, visualization dashboards, source code, and technical reports.
@@ -19,6 +20,7 @@ Welcome to the **Cloud Computing Laboratory Suite** repository maintained by **C
 | **Experiment 2** | **Docker Web App, Container Lifecycle & Docker Hub Distribution** | OS-Level Virtualization & Cloud Registry (Parts 1, 2 & 3) | 📖 [**`Part 1: Build & Deploy`**](docker-python-app/README.md)<br/>📖 [**`Part 2: Lifecycle Management`**](docker-python-app/PART_2_README.md)<br/>📖 [**`Part 3: Docker Hub Push`**](docker-python-app/PART_3_README.md) | Built `my-python-app:latest`, managed container lifecycle (`test-python-container`, port 5001), and pushed `chhavirajeshmishra/my-python-app:v1` to Docker Hub for cross-machine distribution. |
 | **Experiment 3** | **Virtual Machines vs Containers (CPU & Memory)** | Sysbench Workload Profiling (VM vs Docker) | 📖 [**`VMs-vs-Containers/README.md`**](VMs-vs-Containers/README.md) | Docker achieved **123,725.89 MiB/s** memory transfer rate vs VM **108,900.87 MiB/s** (**+13.61% faster throughput**). |
 | **Experiment 4** | **Kubernetes Cluster Scheduling, Scaling & Self-Healing** | Container Orchestration (KinD, K8s, NGINX) | 📖 [**`kubernetes-cluster/README.md`**](kubernetes-cluster/README.md) | Built a 3-node K8s cluster on Windows; demonstrated 50/50 multi-worker pod balancing (6 replicas) and **<5s automated self-healing**. |
+| **Experiment 5** | **Infrastructure as Code (IaC) with HashiCorp Terraform** | Declarative Cloud & Resource Automation | 📖 [**`terraform-iac/README.md`**](terraform-iac/README.md) | Authored declarative HCL manifest, initialized `hashicorp/local` provider, validated syntax, generated execution plan, provisioned `local_file`, verified zero-drift convergence, and executed automated destruction. |
 
 ---
 
@@ -79,6 +81,14 @@ cloud_computing-/
 │   ├── experiment-2-memory-throughput.png     # Sysbench Memory Throughput Graph
 │   ├── Experiment_1_CPU_Performance_VM_vs_Container.pdf # Original Reference Manual
 │   └── Experiment_2_Memory_Performance_Final.pdf       # Original Reference Manual
+│
+├── terraform-iac/                             # Standalone Folder for Experiment 5 (Terraform IaC)
+│   ├── README.md                              # Standalone Report for Terraform Infrastructure as Code
+│   ├── main.tf                                # Declarative Terraform Configuration Manifest
+│   ├── .terraform.lock.hcl                    # Provider Lock File (hashicorp/local)
+│   ├── terraform_iac_experiment_windows_powerShell.docx # Original Lab Manual Guide
+│   ├── Experiment_5_Terraform_IaC_Report.docx # Formatted Word Lab Report
+│   └── images/                                # Empirical Screenshots (Figures 1–5)
 │
 ├── images/                                    # Screenshots & Performance Charts
 └── scripts/                                   # Automation Scripts

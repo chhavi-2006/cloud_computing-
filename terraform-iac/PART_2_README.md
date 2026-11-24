@@ -372,25 +372,8 @@ The real-world infrastructure state is recorded in `terraform.tfstate`:
 
 ---
 
-## 8. Review Questions & Technical Answers
 
-### Q1. What is the role of the `kreuzwerker/docker` provider in Terraform?
-**Answer:** The `kreuzwerker/docker` provider acts as the translation bridge between Terraform's core declarative engine and the Docker Engine API. It exposes Docker primitives (images, containers, volumes, networks, registries) as manageable Terraform resources (`docker_image`, `docker_container`), translating high-level HCL configurations into RESTful Docker Engine socket requests.
 
-### Q2. How does Terraform determine the order of creation between images and containers?
-**Answer:** Terraform analyzes reference expressions within the configuration. Because `docker_container.webserver` sets `image = docker_image.nginx.image_id`, Terraform detects an implicit dependency edge: `docker_container.webserver -> docker_image.nginx`. Terraform builds a Directed Acyclic Graph (DAG) placing `docker_image.nginx` in an earlier execution tier, ensuring the image is pulled before container initialization.
-
-### Q3. Why did the host port for Nginx need to be set to `8082` instead of `8080`?
-**Answer:** In development and lab environments, host port `8080` is frequently occupied by other running services (such as Jenkins, proxy services, or alternate container workloads). Binding an already bound host port triggers a Docker socket error (`bind: address already in use`). Terraform allows effortless, declarative remapping of the external port attribute without altering the container's internal listening configuration (`internal = 80`).
-
-### Q4. What happens when you execute `terraform apply` on an existing, unchanged deployment?
-**Answer:** Terraform performs state refreshing against the Docker Engine API. If the running containers and images match the declarations in `main.tf`, Terraform's drift detection reports:
-`No changes. Your infrastructure matches the configuration.`
-`Apply complete! Resources: 0 added, 0 changed, 0 destroyed.`
-This property of **idempotency** ensures that repeated executions produce identical system states without disrupting running services.
-
-### Q5. How does `terraform destroy` safely de-provision the containers?
-**Answer:** `terraform destroy` reads the state file, reverses the dependency DAG, stops each container via `SIGTERM`/`SIGKILL`, deletes the container runtimes, and (if declared) removes the downloaded image layers, restoring the host system to a clean baseline state.
 
 ---
 

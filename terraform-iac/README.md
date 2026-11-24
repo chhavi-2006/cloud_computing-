@@ -13,24 +13,21 @@
 
 ## 📑 Laboratory Manuals & Reference Links
 
-- 📄 **Official Lab Guide**: [**`terraform_iac_experiment_windows_powerShell.docx`**](terraform_iac_experiment_windows_powerShell.docx)
-- 📝 **Formal Word Lab Submission Report**: [**`Experiment_5_Terraform_IaC_Report.docx`**](Experiment_5_Terraform_IaC_Report.docx)
+- 📖 **Part 1 (Current Document)**: [**`README.md (Single Local File Lifecycle)`**](README.md)
+- 📖 **Part 2 (Multiple Docker Containers)**: [**`PART_2_README.md (NGINX & Python with Docker Provider)`**](PART_2_README.md)
+- 📄 **Part 1 Official Lab Guide**: [**`terraform_iac_experiment_windows_powerShell.docx`**](terraform_iac_experiment_windows_powerShell.docx)
+- 📄 **Part 2 Official Lab Guide (PDF)**: [**`Terraform_Experiment_1_Multiple_Docker_Containers_Large_Font.pdf`**](Terraform_Experiment_1_Multiple_Docker_Containers_Large_Font.pdf)
+- 📝 **Part 1 Word Report**: [**`Experiment_5_Terraform_IaC_Report.docx`**](Experiment_5_Terraform_IaC_Report.docx)
+- 📝 **Part 2 Word Report**: [**`Experiment_5_Part_2_Multiple_Docker_Containers_Report.docx`**](Experiment_5_Part_2_Multiple_Docker_Containers_Report.docx)
 - 🏠 **Main Course Hub**: [**`../README.md`**](../README.md)
 
 ---
 
 ## 📖 Executive Summary
 
-This comprehensive laboratory experiment demonstrates the core principles of **Infrastructure as Code (IaC)** on Windows 11 using **HashiCorp Terraform v1.17.2** and Windows PowerShell. Designed to be completely self-contained and beginner-friendly, this experiment does not require cloud provider accounts (AWS, Azure, GCP) or Linux/WSL environments. Instead, it leverages the official HashiCorp `local` provider plugin to manage local operating system resources (`local_file`).
-
-Through this hands-on study, we explore the complete declarative lifecycle:
-1. **Declaration**: Writing human-readable, declarative HashiCorp Configuration Language (HCL) manifests in `main.tf`.
-2. **Initialization**: Downloading and caching provider binaries (`terraform init`) and establishing dependency locks (`.terraform.lock.hcl`).
-3. **Validation**: Verifying syntactic and attribute schema correctness (`terraform validate`).
-4. **Speculative Planning**: Computing execution plans against the state file (`terraform plan`).
-5. **State Convergence & Provisioning**: Applying changes (`terraform apply`) to create real-world infrastructure and recording its physical reality in `terraform.tfstate`.
-6. **In-Place Modification & Drift Detection**: Modifying resource attributes, achieving idempotency, and observing Terraform's zero-drift reconciliation.
-7. **Automated Destruction**: Cleanly tearing down and deleting all managed assets (`terraform destroy`).
+This laboratory series demonstrates the core principles of **Infrastructure as Code (IaC)** on Windows 11 using **HashiCorp Terraform v1.17.2** across two complementary practical tiers:
+1. **Part 1: Local Resource Lifecycle (`local_file`)**: Pure local resource automation, state tracking, drift convergence, and de-provisioning.
+2. **Part 2: Multiple Container Deployment (`kreuzwerker/docker`)**: Orchestrating real-world multi-container services (NGINX Web Server on port `8082` and Python HTTP Server on port `8081`) via Docker Engine (detailed in [**`PART_2_README.md`**](PART_2_README.md)).
 
 ---
 
@@ -39,18 +36,35 @@ Through this hands-on study, we explore the complete declarative lifecycle:
 ```
 terraform-iac/
 │
-├── main.tf                                                              # Declarative Terraform Configuration Manifest
-├── .terraform.lock.hcl                                                  # Provider Dependency Lock File (hashicorp/local)
-├── terraform_iac_experiment_windows_powerShell.docx                     # Reference University Lab Manual
-├── Experiment_5_Terraform_IaC_Report.docx                               # Formal Academic Word Report
-├── README.md                                                            # Complete Standalone Experiment Documentation
+├── README.md                                                            # Part 1: Local File IaC Documentation
+├── PART_2_README.md                                                     # Part 2: Multiple Docker Containers Documentation
+├── main.tf                                                              # Part 1: Terraform Configuration Manifest
+├── .terraform.lock.hcl                                                  # Part 1: Provider Dependency Lock File (hashicorp/local)
+├── terraform_iac_experiment_windows_powerShell.docx                     # Part 1: Reference Lab Manual Guide
+├── Experiment_5_Terraform_IaC_Report.docx                               # Part 1: Academic Word Lab Report
 │
-└── images/                                                              # Empirical Screenshots & Visual Evidence
-    ├── terraform_validate_and_plan.png                                  # Figure 1: Configuration validation & execution plan
-    ├── terraform_apply_creation.png                                     # Figure 2: Initial apply & resource creation log
-    ├── terraform_modify_drift_no_changes.png                            # Figure 3: Content check & zero-drift convergence
-    ├── terraform_destroy_plan_prompt.png                                # Figure 4: Destruction plan & approval prompt
-    └── terraform_destroy_complete_test_path.png                         # Figure 5: Complete destruction & verification
+├── part2-multiple-containers/                                           # Part 2 Configuration Workspace
+│   ├── main.tf                                                          # Part 2: Docker Provider Manifest (Nginx + Python)
+│   └── .terraform.lock.hcl                                              # Part 2: Provider Dependency Lock File (kreuzwerker/docker)
+├── Terraform_Experiment_1_Multiple_Docker_Containers_Large_Font.pdf     # Part 2: Reference Manual (PDF)
+├── Experiment_5_Part_2_Multiple_Docker_Containers_Report.docx           # Part 2: Academic Word Lab Report
+│
+└── images/                                                              # Empirical Screenshots (Parts 1 & 2)
+    ├── terraform_validate_and_plan.png                                  # Part 1: Config validation & plan
+    ├── terraform_apply_creation.png                                     # Part 1: Initial apply & creation
+    ├── terraform_modify_drift_no_changes.png                            # Part 1: Zero-drift convergence
+    ├── terraform_destroy_plan_prompt.png                                # Part 1: Destruction prompt
+    ├── terraform_destroy_complete_test_path.png                         # Part 1: Destruction verification
+    ├── terraform_p2_init_validate.png                                   # Part 2: Provider init & validation
+    ├── terraform_p2_plan_python_command.png                             # Part 2: Python container plan
+    ├── terraform_p2_plan_python_ports.png                               # Part 2: Python port mapping
+    ├── terraform_p2_plan_nginx_container.png                            # Part 2: Nginx container plan
+    ├── terraform_p2_plan_images_summary.png                             # Part 2: Plan summary (4 to add)
+    ├── terraform_p2_apply_refresh_state.png                             # Part 2: Apply state refresh
+    ├── terraform_p2_apply_complete.png                                  # Part 2: Apply complete (3s)
+    ├── terraform_p2_docker_ps.png                                       # Part 2: Docker ps running containers
+    ├── terraform_p2_browser_nginx_8082.png                              # Part 2: Nginx browser verification
+    └── terraform_p2_browser_python_8081.png                             # Part 2: Python browser verification
 ```
 
 ---

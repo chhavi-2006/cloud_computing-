@@ -177,13 +177,52 @@ resource "local_file" "student_file" {
 }
 ```
 
-### 6.2 Execution Lifecycle Log & State Convergence
+### 6.2 Execution Lifecycle Log & State Convergence (Part 1)
 1. **Initialization (`terraform init`)**: Downloaded and cached provider plugin `hashicorp/local v2.9.0` and generated `.terraform.lock.hcl`.
 2. **Validation (`terraform validate`)**: Validated configuration syntax returning `"Success! The configuration is valid."`.
 3. **Speculative Planning (`terraform plan`)**: Evaluated real-world state vs desired state; generated plan: `1 to add, 0 to change, 0 to destroy`.
 4. **Provisioning (`terraform apply`)**: Applied execution plan, created `student.txt` (`id=06e6ae35c344...`), and wrote state to `terraform.tfstate`.
 5. **Modification & Drift Convergence**: Updated `main.tf` with a 4-line confirmation message and applied in-place updates (`id=926632173084...`). A subsequent `terraform apply` confirmed zero configuration drift (`No changes. Your infrastructure matches the configuration`).
 6. **Automated Destruction (`terraform destroy`)**: De-provisioned resource; `Test-Path .\student.txt` returned `False`, confirming complete resource reclamation (documented in detail in [`terraform-iac/README.md`](terraform-iac/README.md)).
+
+### 6.3 Part 2: Multi-Container Orchestration with Docker Provider
+To extend IaC to real-world container runtimes, Terraform was configured in `C:\terraform-multiple-containers` using the `kreuzwerker/docker` provider plugin (`~> 3.0`, resolved to `v3.9.0`). The configuration declared two heterogeneous containerized microservices:
+1. **NGINX Web Server**: Pulled `nginx:alpine` and instantiated container `terraform-nginx` mapping container port `80` to host port `8082`.
+2. **Python HTTP File Server**: Pulled `python:3.12-slim` and instantiated container `terraform-python`, executing `["python", "-m", "http.server", "8000"]` with port mapping `8081 -> 8000`.
+
+```hcl
+terraform {
+  required_providers {
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0"
+    }
+  }
+}
+provider "docker" {}
+
+resource "docker_image" "nginx" { name = "nginx:alpine" }
+resource "docker_image" "python" { name = "python:3.12-slim" }
+
+resource "docker_container" "webserver" {
+  name  = "terraform-nginx"
+  image = docker_image.nginx.image_id
+  ports { internal = 80; external = 8082 }
+}
+
+resource "docker_container" "python_app" {
+  name    = "terraform-python"
+  image   = docker_image.python.image_id
+  command = ["python", "-m", "http.server", "8000"]
+  ports { internal = 8000; external = 8081 }
+}
+```
+
+### 6.4 Implicit DAG Dependencies & Empirical Verification
+1. **Implicit Dependency Ordering**: By declaring `image = docker_image.nginx.image_id`, Terraform constructed a Directed Acyclic Graph (DAG) ensuring images are fetched before container creation starts.
+2. **Speculative Plan**: `terraform plan` computed 4 additions (`Plan: 4 to add, 0 to change, 0 to destroy`).
+3. **Execution & Port Resolution**: Applied plan via `terraform apply`. Port conflict avoidance was achieved by binding NGINX to external port `8082`.
+4. **Runtime & Browser Verification**: Executed `docker ps`, confirming steady-state execution. Verified endpoints in browser: `http://localhost:8082` (NGINX "Welcome to nginx!") and `http://localhost:8081` (Python directory listing). Full documentation is available in [`terraform-iac/PART_2_README.md`](terraform-iac/PART_2_README.md).
 
 ---
 
@@ -233,6 +272,16 @@ resource "local_file" "student_file" {
 28. **Figure 28 (`images/terraform_modify_drift_no_changes.png`)**: Configuration update verification and state drift convergence check (`0 added, 0 changed, 0 destroyed`).
 29. **Figure 29 (`images/terraform_destroy_plan_prompt.png`)**: Teardown plan preview and destruction confirmation prompt (`terraform destroy`).
 30. **Figure 30 (`images/terraform_destroy_complete_test_path.png`)**: Resource de-provisioning confirmation and filesystem clean verification (`Test-Path .\student.txt` -> `False`).
+31. **Figure 31 (`images/terraform_p2_init_validate.png`)**: Docker provider initialization (`kreuzwerker/docker v3.9.0`) and syntax validation (`terraform validate` -> `Success!`).
+32. **Figure 32 (`images/terraform_p2_plan_python_command.png`)**: Speculative execution plan for Python container specifying custom runtime command (`python -m http.server 8000`).
+33. **Figure 33 (`images/terraform_p2_plan_python_ports.png`)**: Container network port binding for Python service (internal `8000` to external host `8081`).
+34. **Figure 34 (`images/terraform_p2_plan_nginx_container.png`)**: Speculative execution plan for NGINX web server container (`terraform-nginx`).
+35. **Figure 35 (`images/terraform_p2_plan_images_summary.png`)**: Docker image resource declarations (`nginx:alpine`, `python:3.12-slim`) and 4-resource addition plan summary.
+36. **Figure 36 (`images/terraform_p2_apply_refresh_state.png`)**: Real-time state refresh against Docker Engine daemon during `terraform apply`.
+37. **Figure 37 (`images/terraform_p2_apply_complete.png`)**: Creation completion in 3 seconds (`id=82e487287240...`) and `Apply complete! Resources: 1 added, 0 changed, 0 destroyed.`
+38. **Figure 38 (`images/terraform_p2_docker_ps.png`)**: Docker process table inspection (`docker ps`) confirming `terraform-nginx` and `terraform-python` running healthy.
+39. **Figure 39 (`images/terraform_p2_browser_nginx_8082.png`)**: Live HTTP web browser verification of NGINX on `http://localhost:8082` ("Welcome to nginx!").
+40. **Figure 40 (`images/terraform_p2_browser_python_8081.png`)**: Live HTTP web browser verification of Python HTTP server on `http://localhost:8081` (Directory listing for `/`).
 
 ---
 
@@ -242,4 +291,4 @@ This laboratory course suite confirms the distinct operational advantages of clo
 1. **Hypervisors**: Type-1 bare-metal hypervisors (Proxmox VE) demonstrate clear CPU execution superiority over Type-2 hosted hypervisors (+25.90% throughput, -20.59% latency).
 2. **Containers**: Docker containers deliver unmatched execution efficiency, dropping startup latency from tens of seconds to under 1 second, and reducing memory usage by 83x.
 3. **Container Orchestration**: Kubernetes elevates containers into production-ready resilient cloud systems, providing automated declarative reconciliation, multi-node compute distribution, horizontal elasticity, and self-healing fault tolerance.
-4. **Infrastructure as Code (IaC)**: HashiCorp Terraform enforces declarative infrastructure lifecycle automation, state tracking (`terraform.tfstate`), drift detection, and automated clean teardown, eliminating configuration drift and manual provisioning errors.
+4. **Infrastructure as Code (IaC)**: HashiCorp Terraform enforces declarative infrastructure lifecycle automation across both local OS resources and containerized microservices. Through provider plugins (`hashicorp/local`, `kreuzwerker/docker`), Terraform manages dependency graphs (DAG), tracks state persistence (`terraform.tfstate`), guarantees idempotency, detects configuration drift, and ensures automated clean teardown.

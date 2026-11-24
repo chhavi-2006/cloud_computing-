@@ -20,7 +20,7 @@ Welcome to the **Cloud Computing Laboratory Suite** repository maintained by **C
 | **Experiment 2** | **Docker Web App, Container Lifecycle & Docker Hub Distribution** | OS-Level Virtualization & Cloud Registry (Parts 1, 2 & 3) | 📖 [**`Part 1: Build & Deploy`**](docker-python-app/README.md)<br/>📖 [**`Part 2: Lifecycle Management`**](docker-python-app/PART_2_README.md)<br/>📖 [**`Part 3: Docker Hub Push`**](docker-python-app/PART_3_README.md) | Built `my-python-app:latest`, managed container lifecycle (`test-python-container`, port 5001), and pushed `chhavirajeshmishra/my-python-app:v1` to Docker Hub for cross-machine distribution. |
 | **Experiment 3** | **Virtual Machines vs Containers (CPU & Memory)** | Sysbench Workload Profiling (VM vs Docker) | 📖 [**`VMs-vs-Containers/README.md`**](VMs-vs-Containers/README.md) | Docker achieved **123,725.89 MiB/s** memory transfer rate vs VM **108,900.87 MiB/s** (**+13.61% faster throughput**). |
 | **Experiment 4** | **Kubernetes Cluster Scheduling, Scaling & Self-Healing** | Container Orchestration (KinD, K8s, NGINX) | 📖 [**`kubernetes-cluster/README.md`**](kubernetes-cluster/README.md) | Built a 3-node K8s cluster on Windows; demonstrated 50/50 multi-worker pod balancing (6 replicas) and **<5s automated self-healing**. |
-| **Experiment 5** | **Infrastructure as Code (IaC) with HashiCorp Terraform** | Declarative Cloud & Resource Automation | 📖 [**`terraform-iac/README.md`**](terraform-iac/README.md) | Authored declarative HCL manifest, initialized `hashicorp/local` provider, validated syntax, generated execution plan, provisioned `local_file`, verified zero-drift convergence, and executed automated destruction. |
+| **Experiment 5** | **Infrastructure as Code (IaC) with HashiCorp Terraform** | Declarative Cloud & Resource Automation (Parts 1 & 2) | 📖 [**`Part 1: Local Resource IaC`**](terraform-iac/README.md)<br/>📖 [**`Part 2: Multiple Docker Containers`**](terraform-iac/PART_2_README.md) | **Part 1**: Declared `local_file`, validated, converged state, and destroyed.<br/>**Part 2**: Provisioned multi-container services (`terraform-nginx` on port 8082, `terraform-python` on port 8081) using `kreuzwerker/docker` provider with implicit DAG dependency resolution. |
 
 ---
 
@@ -83,12 +83,18 @@ cloud_computing-/
 │   └── Experiment_2_Memory_Performance_Final.pdf       # Original Reference Manual
 │
 ├── terraform-iac/                             # Standalone Folder for Experiment 5 (Terraform IaC)
-│   ├── README.md                              # Standalone Report for Terraform Infrastructure as Code
-│   ├── main.tf                                # Declarative Terraform Configuration Manifest
-│   ├── .terraform.lock.hcl                    # Provider Lock File (hashicorp/local)
-│   ├── terraform_iac_experiment_windows_powerShell.docx # Original Lab Manual Guide
-│   ├── Experiment_5_Terraform_IaC_Report.docx # Formatted Word Lab Report
-│   └── images/                                # Empirical Screenshots (Figures 1–5)
+│   ├── README.md                              # Part 1: Local File IaC Report
+│   ├── PART_2_README.md                       # Part 2: Multiple Docker Containers Report
+│   ├── main.tf                                # Part 1: Declarative Configuration Manifest
+│   ├── .terraform.lock.hcl                    # Part 1: Provider Lock File (hashicorp/local)
+│   ├── terraform_iac_experiment_windows_powerShell.docx # Part 1: Reference Lab Guide
+│   ├── Experiment_5_Terraform_IaC_Report.docx # Part 1: Formatted Word Lab Report
+│   ├── part2-multiple-containers/             # Part 2: Working Directory
+│   │   ├── main.tf                            # Part 2: Docker Provider Manifest (Nginx + Python)
+│   │   └── .terraform.lock.hcl                # Part 2: Provider Lock File (kreuzwerker/docker)
+│   ├── Terraform_Experiment_1_Multiple_Docker_Containers_Large_Font.pdf # Part 2: Reference Manual
+│   ├── Experiment_5_Part_2_Multiple_Docker_Containers_Report.docx      # Part 2: Formatted Word Lab Report
+│   └── images/                                # Empirical Screenshots (Parts 1 & 2)
 │
 ├── images/                                    # Screenshots & Performance Charts
 └── scripts/                                   # Automation Scripts

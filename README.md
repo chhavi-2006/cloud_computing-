@@ -16,7 +16,7 @@ Welcome to the **Cloud Computing Laboratory Suite** repository maintained by **C
 | Experiment ID | Title | Domain / Focus | Dedicated Documentation | Key Result |
 | :--- | :--- | :--- | :--- | :--- |
 | **Experiment 1** | **Type-1 vs Type-2 Hypervisor Performance Analysis** | Hardware Virtualization (KVM vs VMware) | 📖 [**`HYPERVISOR_README.md`**](HYPERVISOR_README.md) | Proxmox VE (Type-1) achieved **+25.90% higher throughput** and **20.59% lower latency** than VMware Workstation (Type-2). |
-| **Experiment 2** | **Dockerizing Python Web Application & Deployment** | OS-Level Virtualization (Docker Containers) | 📖 [**`docker-python-app/README.md`**](docker-python-app/README.md) | Docker containers started in **<1.0s** (50x faster than VMs), using **24.5 MB RAM** (83x smaller) and **145 MB storage**. |
+| **Experiment 2** | **Dockerizing Python Web App & Container Lifecycle Management** | OS-Level Virtualization & Lifecycle (Parts 1 & 2) | 📖 [**`docker-python-app/README.md`**](docker-python-app/README.md) (Part 1)<br/>📖 [**`docker-python-app/PART_2_README.md`**](docker-python-app/PART_2_README.md) (Part 2) | Built `my-python-app:latest`, verified port mappings (5000 & 5001), executed interactive shell (`/bin/sh`), tested state retention across stop/start (`6c755d50ded2`), and proved image immutability. |
 | **Experiment 3** | **Virtual Machines vs Containers (CPU & Memory)** | Sysbench Workload Profiling (VM vs Docker) | 📖 [**`VMs-vs-Containers/README.md`**](VMs-vs-Containers/README.md) | Docker achieved **123,725.89 MiB/s** memory transfer rate vs VM **108,900.87 MiB/s** (**+13.61% faster throughput**). |
 | **Experiment 4** | **Kubernetes Cluster Scheduling, Scaling & Self-Healing** | Container Orchestration (KinD, K8s, NGINX) | 📖 [**`kubernetes-cluster/README.md`**](kubernetes-cluster/README.md) | Built a 3-node K8s cluster on Windows; demonstrated 50/50 multi-worker pod balancing (6 replicas) and **<5s automated self-healing**. |
 
@@ -60,7 +60,8 @@ cloud_computing-/
 │       └── k8s_self_healing_healed.png
 │
 ├── docker-python-app/                         # Standalone Folder for Experiment 2 (Docker App & Lifecycle)
-│   ├── README.md                              # Complete Report covering Parts 1 & 2
+│   ├── README.md                              # Part 1: Build & Deploy Experiment Report
+│   ├── PART_2_README.md                       # Part 2: Run, Test & Manage Lifecycle Report
 │   ├── app.py                                 # Flask Web Application Code
 │   ├── requirements.txt                       # Python Dependencies
 │   ├── Dockerfile                             # Docker Build Configuration

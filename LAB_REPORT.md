@@ -85,7 +85,7 @@ CMD ["python", "app.py"]
 
 ### 4.4 Phase 2: Container Lifecycle Operations, Port Forwarding (5001:5000) & Interactive Shell
 
-Following the curriculum lab manual (*Experiment 2: Run, Test and Manage a Docker Container*), the pre-existing image `my-python-app` was reused to demonstrate container lifecycle management without rebuilding:
+Following the curriculum lab manual (*Experiment 2: Run, Test and Manage a Docker Container*), the pre-existing image `my-python-app` was reused to demonstrate container lifecycle management without rebuilding (documented in detail in [`docker-python-app/PART_2_README.md`](docker-python-app/PART_2_README.md)):
 
 1. **Detached Run with Custom Port Binding**: `docker run -d -p 5001:5000 --name test-python-container my-python-app` instantiated container `6c755d50ded2`, mapping host port `5001` to internal Flask port `5000`.
 2. **Multi-Channel HTTP Testing**: Verified service responsiveness via Google Chrome (`http://localhost:5001`) and PowerShell `Invoke-WebRequest http://localhost:5001`, both confirming HTTP 200 OK.

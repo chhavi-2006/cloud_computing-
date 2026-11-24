@@ -569,27 +569,7 @@ The Terraform State file (`terraform.tfstate`) is the core mechanism that enable
 
 ---
 
-## 📚 Review Questions & Theoretical Solutions
 
-### Q1: What is Infrastructure as Code (IaC)?
-> **Answer**: Infrastructure as Code (IaC) is the practice of managing and provisioning computing infrastructure (servers, networks, storage, configuration files) through machine-readable definition files rather than manual interactive hardware configuration or ad-hoc CLI scripts. It brings software engineering practices—such as version control, automated testing, peer review, and continuous deployment—to infrastructure management.
-
-### Q2: Why is `terraform init` required before any other command?
-> **Answer**: `terraform init` scans the configuration files in the working directory, determines the required provider plugins (such as `hashicorp/local`), downloads the provider binaries from the Terraform Registry into the hidden `.terraform` cache, sets up the backend storage for state files, and generates the dependency lock file `.terraform.lock.hcl`. Without initialization, Terraform lacks the platform-specific API code needed to execute resource actions.
-
-### Q3: What is the purpose of `terraform plan`?
-> **Answer**: `terraform plan` performs a dry-run comparison between the declared configuration in `main.tf`, the current state file (`terraform.tfstate`), and the actual real-world infrastructure. It generates an execution plan that explicitly details what resources will be added (`+`), modified (`~`), or destroyed (`-`). This speculative execution ensures predictability and safety, allowing engineers to audit changes before applying them.
-
-### Q4: What happens when `terraform apply` is executed?
-> **Answer**: `terraform apply` takes the computed execution plan, requests user confirmation (unless bypassed with `-auto-approve`), invokes the appropriate provider plugin API calls to create, update, or destroy physical infrastructure, and records the resulting resource metadata and attributes into `terraform.tfstate`.
-
-### Q5: Why does Terraform maintain a state file (`terraform.tfstate`)?
-> **Answer**: The state file is Terraform's single source of truth. It stores the mapping between declarative configuration blocks and real-world infrastructure instances, tracks resource dependencies, caches resource metadata to optimize performance (avoiding slow API queries on every plan), and enables drift detection by comparing desired configuration against reality.
-
-### Q6: What is the difference between `terraform destroy` and manually deleting a resource?
-> **Answer**: `terraform destroy` reads the dependency graph and state file to cleanly and systematically de-provision all managed resources in the reverse order of creation, ensuring that state metadata is properly purged and zero orphaned dependencies remain. Manually deleting a resource out-of-band breaks state synchronization, leading to configuration drift that causes subsequent Terraform runs to encounter unexpected errors or re-create deleted assets.
-
----
 
 ## 🏁 Conclusion & Key Technical Takeaways
 
